@@ -2,7 +2,13 @@
 # handlers file for rundeck
 
 - name: start rundeck
-  service: name=rundeckd state=started enabled=true
+  service: 
+    name: rundeckd 
+    state: started 
+    enabled: true
 
 - name: restart rundeck
-  service: name=rundeckd state=restarted enabled=true
+  service: 
+    name: rundeckd 
+    state: restarted 
+    enabled: true

@@ -6,7 +6,7 @@
 
 - name: install rundeck repo
   yum: 
-    name: http://repo.rundeck.org/latest.rpm 
+    name: "{{ rundeck_repo }}" 
     state: present
     disable_gpg_check: yes
 
@@ -29,7 +29,7 @@
 #  notify:
 #    - restart rundeck
 
-- name: configure rundeck properties
+- name: configure rundeck properties (rundeck-config.properties)
   lineinfile:
     dest: /etc/rundeck/rundeck-config.properties
     line: "{{ item.parameter }} = {{ item.value }}"
@@ -56,7 +56,7 @@
     - restart rundeck
 
   
-- name: Rundeck | Ensure server url is configured (framework.properties)
+- name: Rundeck | Ensure server name is configured (framework.properties)
   lineinfile: >
     dest=/etc/rundeck/framework.properties
     regexp="^framework\.server\.name\s*\=s*"
@@ -64,7 +64,7 @@
   notify:
     - restart rundeck
       
-- name: Rundeck | Ensure server url is configured (framework.properties)
+- name: Rundeck | Ensure server hostname is configured (framework.properties)
   lineinfile: >
     dest=/etc/rundeck/framework.properties
     regexp="^framework\.server\.hostname\s*\=s*"

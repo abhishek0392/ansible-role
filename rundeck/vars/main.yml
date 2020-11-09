@@ -4,7 +4,7 @@
 rundeck_server_ip: 52.168.3.136
 rundeck_protocol: http
 rundeck_port: 4440
-
+rundeck_repo: http://repo.rundeck.org/latest.rpm
 
 rundeck_config:
   - parameter: grails.serverURL
