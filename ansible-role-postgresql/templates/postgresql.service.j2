@@ -1,0 +1,5 @@
+.include /lib/systemd/system/postgresql.service
+[Service]
+
+# Location of database directory
+Environment=PGDATA={{ postgres_new_data_dir }}

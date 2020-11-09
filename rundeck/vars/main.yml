@@ -1,0 +1,22 @@
+---
+# vars file for rundeck
+
+rundeck_server_ip: 52.168.3.136
+rundeck_protocol: http
+rundeck_port: 4440
+
+
+rundeck_config:
+  - parameter: grails.serverURL
+    value: "{{ rundeck_server_ip }}"
+#  - parameter: dataSource.url
+#    value: "jdbc:h2:file:/opt/rundeck/server/data/grailsdb;MVCC=true"
+#   To connect to PostgreSQL, use these settings. (Database has to be prepared.)
+  - parameter: dataSource.url
+    value: "jdbc:postgresql://localhost:5432/rundeck"
+  - parameter: dataSource.username
+    value: rundeckuser
+  - parameter: dataSource.password
+    value: rundeckpassword
+  - parameter: dataSource.driverClassName
+    value: org.postgresql.Driver

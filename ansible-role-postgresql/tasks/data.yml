@@ -1,0 +1,40 @@
+---
+#- hosts: localhost
+#  connection: local
+#  become: true
+  
+#  tasks:
+  - name: Ensure PostgreSQL is stopped
+    service:
+      name: "{{ postgresql_daemon }}"
+      state: stopped
+
+  - name: File 
+    file:
+      path: /etc/systemd/system/postgresql.service
+      state: touch
+      mode: '0755'
+
+  - name: Override PGDATA for service definition
+    template: 
+     src: postgresql.service.j2 
+     dest: "/etc/systemd/system/postgresql.service"
+
+  - name: Initialize the database
+    command: "su - postgres -c \"initdb -D {{ postgres_new_data_dir }}\""
+
+  - name: context mapping for data directory
+    command: "semanage fcontext --add --equal /var/lib/pgsql {{ postgres_new_data_dir }}"
+    ignore_errors: true
+
+  - name: apply this context mapping to the directory
+    command: "restorecon -R -v  {{ postgres_new_data_dir }}"
+    ignore_errors: true
+
+  - name: reload systemctl services
+    command: 'systemctl daemon-reload'
+
+  - name: Ensure PostgreSQL is started and enabled on boot.
+    service:
+      name: postgresql.service
+      state: started

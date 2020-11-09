@@ -1,0 +1,75 @@
+---
+- name: install java-1.8.0-openjdk
+  yum: 
+    name: java-1.8.0-openjdk 
+    state: present
+
+- name: install rundeck repo
+  yum: 
+    name: http://repo.rundeck.org/latest.rpm 
+    state: present
+    disable_gpg_check: yes
+
+- name: install rundeck
+  yum: 
+    name: rundeck 
+    state: present
+
+#- name: start and enable rundeck
+#  service: 
+#   name: rundeckd 
+#   state: started 
+#   enabled: yes
+
+#- name: Rundeck | Ensure server url is configured (rundeck-config.properties)
+#  lineinfile: >
+#    dest=/etc/rundeck/rundeck-config.properties
+#    regexp="^grails.serverURL="
+#    line="grails.serverURL={{ rundeck_protocol }}://{{ rundeck_server_ip }}:{{ rundeck_port }}"
+#  notify:
+#    - restart rundeck
+
+- name: configure rundeck properties
+  lineinfile:
+    dest: /etc/rundeck/rundeck-config.properties
+    line: "{{ item.parameter }} = {{ item.value }}"
+    regexp: "^{{ item.parameter }}"
+    create: yes
+    mode: "0644"
+  notify:
+    - restart rundeck
+  loop: "{{ rundeck_config }}"
+  loop_control:
+    label: "{{ item.parameter }}"
+
+
+
+
+
+           
+- name: Rundeck | Ensure server url is configured (framework.properties)
+  lineinfile: >
+    dest=/etc/rundeck/framework.properties
+    regexp="^framework\.server\.url\s*\=s*"
+    line="framework.server.url = {{ rundeck_protocol }}://{{ rundeck_server_ip }}:{{ rundeck_port }}"
+  notify:
+    - restart rundeck
+
+  
+- name: Rundeck | Ensure server url is configured (framework.properties)
+  lineinfile: >
+    dest=/etc/rundeck/framework.properties
+    regexp="^framework\.server\.name\s*\=s*"
+    line="framework.server.name = {{ rundeck_server_ip }}"
+  notify:
+    - restart rundeck
+      
+- name: Rundeck | Ensure server url is configured (framework.properties)
+  lineinfile: >
+    dest=/etc/rundeck/framework.properties
+    regexp="^framework\.server\.hostname\s*\=s*"
+    line="framework.server.hostname = {{ rundeck_server_ip }}"
+  notify:
+    - restart rundeck
+
+
