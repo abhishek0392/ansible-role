@@ -1,0 +1,8 @@
+---
+# tasks file for unixODBC
+
+- name: Install UnixODBC
+  yum:
+     name: unixODBC
+     state: present
+
